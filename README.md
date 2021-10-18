@@ -6,7 +6,7 @@ Open CMD in C:\Program Files\MongoDB and execute command ```mongod``` to start M
 
 ## Connecting using Spring Boot
 **Default credentials**: spring.data.mongodb.uri=mongodb://localhost:27017/airportdb
-spring.data.mongodb.uri=mongodb://username:password@localhost:27017/airportdb
+spring.data.mongodb.uri=mongodb://**username**:**password**@localhost:27017/airportdb
 
 ## Relational vs Mongo
 | Relational  | Mongo |
