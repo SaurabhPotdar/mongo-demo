@@ -87,7 +87,7 @@ When we search by _Java_, we get
 Jonn
 Dan
 ```
-John is first as aboutMe has more weight. Also Java Guru is not in the o/p as it is not indexed.
+John is first as aboutMe has more weight. Also Java Guru is not in the o/p as name field it is not indexed.
 
 ### Executing a FTS
 ```
