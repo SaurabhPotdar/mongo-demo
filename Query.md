@@ -67,3 +67,42 @@ db.routes.find({ "$and": [ { "$or" :[ { "dst_airport": "KZN" },
                                      { "airplane": "A81" } ] }
                          ]}).pretty()
 ```
+
+## Arrays
+
+1. ```{amenities: ["Shampoo", "WiFi"]}``` Matches all documents which have only Shampoo, WiFi. Order is important here.
+2. ```{"amenities": {"$all": ["Shampoo", "WiFi"]}}``` Matches all documents which have atleast Shampoo, WiFi. Order is not important here.
+3. Find all documents with exactly 20 amenities which include all the amenities listed in the query array:
+
+    ```text
+      db.listingsAndReviews.find({ "amenities": {
+                                  "$size": 20,
+                                  "$all": [ "Internet", "Wifi",  "Kitchen",
+                                           "Heating", "Family/kid friendly",
+                                           "Washer", "Dryer", "Essentials",
+                                           "Shampoo", "Hangers",
+                                           "Hair dryer", "Iron",
+                                           "Laptop friendly workspace" ]
+                                         }
+                            }).pretty()
+    ```
+
+4. $elemMatch To query object inside array or project the object inside array. Can be used in query or projection in find().\
+```{"scores":{"$elemMatch":{"score":{ "$gt": 85 }})``` Here scores is the array and score is a field in the object inside that array\
+eg. Find all documents where the student in class 431 received a grade higher than 85 for any type of assignment:
+
+    ```text
+        db.grades.find(
+          { "class_id": 431 },
+          { "scores": { "$elemMatch": { "score": { "$gt": 85 } } }
+        }).pretty()
+    ```
+
+## Projection
+
+```db.collection.find(query, projection)```\
+Use 1 to include field and 0 to exclude it.
+
+1. ```db.collection.find(query, field1:1, field2:1)``` Only returns field1, field2 and _id
+2. ```db.collection.find(query, field1:0, field2:0)``` Returns all the fields except field1 and field2
+3. ```db.collection.find(query, field1:1, field2:1, _id:0)``` Only returns field1 and field2
