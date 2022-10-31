@@ -25,7 +25,7 @@
 
 ## Inserting
 
-```db.inspections.insert([{ "_id": 1, "test": 1 },{ "_id": 1, "test": 2 },{ "_id": 3, "test": 3 }])```\
+```db.inspections.insert([{ "_id": 1, "test": 1 },{ "_id": 1, "test": 2 },{ "_id": 3, "test": 3 }])```
 
 ### Insertion order
 
@@ -35,10 +35,35 @@ By default ```ordered=false```\
 e.g. when inserting ```_id=1,_id=1,_id=2```, ordered=false will only insert ```_id=1``` and as it stops when duplicate id is encountered.
 ordered=true will insert ```_id=1,_id=2```
 
-
 ## Fitering
 
 1. ```db.zips.find({"state": "NY", "city": "ALBANY"}).pretty()```
 2. ```db.zips.find({state: "NY", city: "ALBANY"}).pretty()``` -> Also works with semicolon
 3. ```db.zips.findOne({state: "NY", city: "ALBANY"}).pretty()```
 4. ```db.zips.find({state: "NY", city: "ALBANY"}).count()```
+
+### Query operators
+
+```$eq, $ne, $gt, $lt, $gte, $lte```\
+Syntax : ```{field:{operator:value}}```\
+Find all documents where the tripduration was less than or equal to 70 seconds and the usertype was Customer using the **implicit** equality operator:
+
+```text
+db.trips.find({ "tripduration": { "$lte" : 70 },
+                "usertype": "Customer" }).pretty()
+```
+
+### Logical operators
+
+```$and, $or, $nor, $not```\
+Syntax : ```{operator : [{statement1},{statement2},...]}```\
+Find all documents where airplanes CR2 or A81 left or landed in the KZN airport:
+
+```text
+db.routes.find({ "$and": [ { "$or" :[ { "dst_airport": "KZN" },
+                                    { "src_airport": "KZN" }
+                                  ] },
+                          { "$or" :[ { "airplane": "CR2" },
+                                     { "airplane": "A81" } ] }
+                         ]}).pretty()
+```
