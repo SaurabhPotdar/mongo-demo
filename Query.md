@@ -106,3 +106,62 @@ Use 1 to include field and 0 to exclude it.
 1. ```db.collection.find(query, field1:1, field2:1)``` Only returns field1, field2 and _id
 2. ```db.collection.find(query, field1:0, field2:0)``` Returns all the fields except field1 and field2
 3. ```db.collection.find(query, field1:1, field2:1, _id:0)``` Only returns field1 and field2
+
+## Aggregation framework
+
+Another way to query Mongo db. Whatever we can do using MQL can also be done using aggragation framework. But with aggregation we can combine multiple steps i.e create a **pipeline**.
+
+1. Using MQL
+
+     ```text
+     db.listingsAndReviews.find({ "amenities": "Wifi" },
+                           { "price": 1, "address": 1, "_id": 0 }).pretty()          
+    ```
+
+2. Using aggregation
+
+    ```text
+    db.listingsAndReviews.aggregate([
+                                  { "$match": { "amenities": "Wifi" } },
+                                  { "$project": { "price": 1,
+                                                  "address": 1,
+                                                  "_id": 0 }}]).pretty()
+    ```
+
+3. MQL can only **filter, update** data. With aggregation we can group, compute, reshape, match, project.
+
+4. $group
+
+    ```text
+    {$group:
+      {
+        _id: <expression>, //Group by field
+        <field1>: {accumulator1: expression},
+        ...
+      }
+    }
+    ```
+
+    eg. Project only the address field value for each document, then group all documents into one document per address.country value, and count one for each document in each group.
+
+    ```text
+    db.listingsAndReviews.aggregate([
+                                  { "$project": { "address": 1, "_id": 0 }},
+                                  { "$group": { "_id": "$address.country",
+                                                "count": { "$sum": 1 } } }
+                                ])
+    ```
+
+    Important : We are projecting address, so in the next stage we can only query on fields in address object.
+
+## Sort and Limit
+
+1. Sort by population in ASC ```db.zips.find().sort({ "pop": 1 }).limit(1)```
+
+2. Sort by population in DESC ```db.zips.find().sort({ "pop": -1 }).limit(1)```
+
+3. ```db.zips.find().sort({ "pop": 1, "city": -1 })```
+
+## Indexing
+
+Compound index ```db.trips.createIndex({ "start station id": 1, "birth year": 1 })```
