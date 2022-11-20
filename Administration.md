@@ -55,3 +55,10 @@ db.createUser({
 
 ```mongo --username root --password root123 --authenticationDatabase admin```
 There are some built in roles like read, readWrite, userAdmin -> User management, dbAdmin -> Collection management, dbOwner -> For a database
+
+## Replication
+
+1. Replica set -> A set of nodes which have same copy of data -> Gives high availability.
+2. Primary and secondary nodes, leader election when primary goes down(Using RAFT protocol for distributed census)
+3. Primary writes and secondary sync data from it(Eventual consistency)
+4. Have odd number of secondary nodes
